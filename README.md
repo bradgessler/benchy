@@ -1,6 +1,6 @@
 # Benchy
 
-I wrote this one day because I was trying to test upload performance and no tools out there were cutting it. You can do sane stuff like:
+I wrote this one day because I was trying to test upload performance and there really weren't any tools out there that could run a simple POST stress test. You can do sane stuff like:
 
 ```
 benchy post http://127.0.0.1:8080/ -c 10 < my_pic.jpg # Simulates 10 concurrent HTTP POST requests
@@ -12,7 +12,7 @@ or
 benchy get http://127.0.0.1:8080/ # Just run a bunch of GET requests at a concurrency of 1
 ```
 
-and it runs indefintely until you kill the process.
+and it runs indefintely until you kill the process. Best of all, its very minimialist and sticks to the basics.
 
 # Getting Started
 
