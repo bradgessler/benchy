@@ -16,7 +16,7 @@ and it runs indefintely until you kill the process.
 
 # Getting Started
 
-Install benchie:
+Install benchy:
 
 ```
 gem install benchy
