@@ -80,7 +80,7 @@ module Benchy
   # Parse out some command line goodness
   class CLI < Thor
     %w[post put].each do |meth|
-      desc "#{meth} URL", "#{meth.upcase} to a URL"
+      desc "#{meth} URL", "Perform #{meth.upcase} requests to a URL"
       method_option :body,
         :type => :string,
         :aliases => '-b',
@@ -104,7 +104,7 @@ module Benchy
     end
 
     %w[get head delete].each do |meth|
-      desc "#{meth} URL", "#{meth.upcase} to a URL"
+      desc "#{meth} URL", "Perform #{meth.upcase} requests against a URL"
       method_option :headers,
         :type => :hash,
         :aliases => '-h',

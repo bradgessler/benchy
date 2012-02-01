@@ -27,10 +27,10 @@ Then run a command! As you'd expect:
 ```
 $ benchy help
 Tasks:
-  benchy delete URL   # DELETE to a URL
-  benchy get URL      # GET to a URL
-  benchy head URL     # HEAD to a URL
+  benchy delete URL   # Perform DELETE requests against a URL
+  benchy get URL      # Perform GET requests against a URL
+  benchy head URL     # Perform HEAD requests against a URL
   benchy help [TASK]  # Describe available tasks or one specific task
-  benchy post URL     # POST to a URL
-  benchy put URL      # PUT to a URL
+  benchy post URL     # Perform POST requests to a URL
+  benchy put URL      # Perform PUT requests to a URL
 ```
