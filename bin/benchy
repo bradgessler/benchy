@@ -2,6 +2,6 @@
 $:.unshift File.expand_path('../../lib', __FILE__)
 
 require 'rubygems'
-require 'httpee'
+require 'benchy'
 
-Httpee::CLI.start
+Benchy::CLI.start

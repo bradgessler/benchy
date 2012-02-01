@@ -1,5 +1,5 @@
 require 'em-http-request'
 
-module Httpee
+module Benchy
   VERSION = "0.0.1"
 end

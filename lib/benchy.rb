@@ -1,8 +1,8 @@
-require "httpee/version"
+require "benchy/version"
 require 'logger'
 require "thor"
 
-module Httpee
+module Benchy
   def self.logger
     @logger ||= Logger.new($stdout)
   end
@@ -40,11 +40,11 @@ module Httpee
 
       http = request.em
       http.callback {
-        Httpee.logger.info "#{name}\t| #{request.method.upcase} #{request.url} - HTTP #{http.response_header.status}"
+        Benchy.logger.info "#{name}\t| #{request.method.upcase} #{request.url} - HTTP #{http.response_header.status}"
         run
       }
       http.errback {
-        Httpee.logger.debug "Connection error!"
+        Benchy.logger.debug "Connection error!"
         halt # TODO - Make this fail the ping and try again, not halt
       }
     end
@@ -110,6 +110,7 @@ module Httpee
       :desc => "Concurrent requests",
       :aliases => '-c',
       :default => 1
+
     def benchmark(url)
       req = Request.new(url, options[:method], options[:headers], self.class.body(options))
       EM.run { Dispatcher.new(req, options[:concurrency]).run }

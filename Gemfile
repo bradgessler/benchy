@@ -1,4 +1,4 @@
 source "http://rubygems.org"
 
-# Specify your gem's dependencies in httpee.gemspec
+# Specify your gem's dependencies in benchy.gemspec
 gemspec

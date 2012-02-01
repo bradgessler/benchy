@@ -1,17 +1,17 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "httpee/version"
+require "benchy/version"
 
 Gem::Specification.new do |s|
-  s.name        = "httpee"
-  s.version     = Httpee::VERSION
+  s.name        = "benchy"
+  s.version     = Benchy::VERSION
   s.authors     = ["Brad Gessler"]
   s.email       = ["brad@bradgessler.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Benchmark HTTP applications}
+  s.description = %q{A dirty-simple HTTP benchmarking application}
 
-  s.rubyforge_project = "httpee"
+  s.rubyforge_project = "benchy"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
