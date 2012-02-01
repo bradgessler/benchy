@@ -23,7 +23,7 @@ module Benchy
     end
 
     def workers
-      @workers ||= (0...concurrency).map{|n| Worker.new(request, "worker.#{n}") }
+      @workers ||= (0..concurrency).map{|n| Worker.new(request, "worker.#{n}") }
     end
   end
 
@@ -44,7 +44,7 @@ module Benchy
         run
       }
       http.errback {
-        Benchy.logger.debug "Connection error!"
+        Benchy.logger.error "#{name}\t| Connection error!"
         halt # TODO - Make this fail the ping and try again, not halt
       }
     end
@@ -69,57 +69,71 @@ module Benchy
     # Grab an instance of an Em::Http request so we can run it somewhere.
     def em
       EventMachine::HttpRequest.new(url).send(method.downcase,
-        :head => default_headers.merge(headers),
+        :head => headers,
         :body => body,
         :connect_timeout => 9000,    # Disable
         :inactivity_timeout => 9000  # Disable
       )
     end
-
-    # Setup smart default headers to minimize the chances that a request gets rejected.
-    def default_headers
-      default_headers = {}
-      default_headers['Content-Type'] = 'application/binary-octet' if body
-      default_headers['Accepts']      = '*/*'
-      default_headers
-    end
   end
 
   # Parse out some command line goodness
   class CLI < Thor
-    desc "benchmark URL", "Run benchmarks against server"
-    method_option :body,
-      :type => :string,
-      :aliases => '-b',
-      :desc => "Request body"
-    method_option :file,
-      :type => :string,
-      :aliases => '-f',
-      :desc => "File for request body"
-    method_option :headers,
-      :type => :hash,
-      :aliases => '-h',
-      :desc => 'HTTP headers'
-    method_option :method,
-      :type => :string, 
-      :desc => "Request method",
-      :aliases => '-m',
-      :default => 'GET'
-    method_option :concurrency,
-      :type => :numeric,
-      :desc => "Concurrent requests",
-      :aliases => '-c',
-      :default => 1
+    %w[post put].each do |meth|
+      desc "#{meth} URL", "#{meth.upcase} to a URL"
+      method_option :body,
+        :type => :string,
+        :aliases => '-b',
+        :desc => "Request body"
+      method_option :headers,
+        :type => :hash,
+        :aliases => '-h',
+        :desc => 'Request headers',
+        :default => {
+          'Content-Type' => 'application/binary-octet',
+          'Accepts' => '*/*'
+        }
+      method_option :concurrency,
+        :type => :numeric,
+        :desc => "Concurrent requests",
+        :aliases => '-c',
+        :default => 1
+      define_method meth do |url|
+        request(url, meth, self.class.body(options))
+      end
+    end
 
-    def benchmark(url)
-      req = Request.new(url, options[:method], options[:headers], self.class.body(options))
-      EM.run { Dispatcher.new(req, options[:concurrency]).run }
+    %w[get head delete].each do |meth|
+      desc "#{meth} URL", "#{meth.upcase} to a URL"
+      method_option :headers,
+        :type => :hash,
+        :aliases => '-h',
+        :desc => 'Request headers',
+        :default => {
+          'Content-Type' => 'application/binary-octet',
+          'Accepts' => '*/*'
+        }
+      method_option :concurrency,
+        :type => :numeric,
+        :desc => "Concurrent requests",
+        :aliases => '-c',
+        :default => 1
+      define_method meth do |url|
+        request(url, meth)
+      end
     end
 
   private
-    # Normalize the request body if its a file or a text string.
+    def request(url, method=:get, body=nil)
+      req = Request.new(url, method, options[:headers], body)
+      EM.run { 
+        Dispatcher.new(req, options[:concurrency]).run
+      }
+    end
+
+    # Normalize the request body if its specified from the CLI or if its piped in from terminal
     def self.body(options)
-      options[:file] ? File.read(options[:file]) : options[:body]
+      options[:body] || (STDIN.read unless STDIN.tty?)
     end
   end
 end
