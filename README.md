@@ -14,7 +14,15 @@ benchy get http://127.0.0.1:8080/ # Just run a bunch of GET requests at a concur
 
 and it runs indefintely until you kill the process.
 
-As you'd expect:
+# Getting Started
+
+Install benchie:
+
+```
+gem install benchy
+```
+
+Then run a command! As you'd expect:
 
 ```
 $ benchy help
