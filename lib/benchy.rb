@@ -23,7 +23,7 @@ module Benchy
     end
 
     def workers
-      @workers ||= (0..concurrency).map{|n| Worker.new(request, "worker.#{n}") }
+      @workers ||= (0...concurrency).map{|n| Worker.new(request, "worker.#{n}") }
     end
   end
 
@@ -110,7 +110,6 @@ module Benchy
         :aliases => '-h',
         :desc => 'Request headers',
         :default => {
-          'Content-Type' => 'application/binary-octet',
           'Accepts' => '*/*'
         }
       method_option :concurrency,
